@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>¯\_(ツ)_/¯</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', 'Roboto', 'Open Sans', 'Arial', sans-serif;
+  font-weight: bold;
+  color: black;
+  background: white;
+  user-select: none;
+  overflow: hidden;
+}
+main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 10000px;
+}
+button {
+  font: inherit;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  max-width: 80vw;
+  max-height: 80vh;
+  width: 400px;
+  height: 200px;
+  font-size: 5vmin;
+  will-change: transform;
+  position: relative;
+  transform-style: preserve-3d;
+  border-radius: 2vmin;
+}
+button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1vmin solid transparent;
+  border-radius: 2vmin;
+}
+button:focus {
+  outline: none;
+}
+button:focus::after {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+button:active,
+button.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.25);
+}
+button:active::after,
+button.active::after {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+#m {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform-style: preserve-3d;
+}
+#m button {
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1vmin solid transparent;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+</style>
+</head>
+<body>
+
+<main>
+  <button id="b" autofocus>
+    <div id="m"></div>
+    ¯\_(ツ)_/¯
+  </button>
+</main>
+
+<input type="text" hidden value="¯&zwj;\&zwj;_&zwj;(&zwj;ツ&zwj;)&zwj;_&zwj;/&zwj;¯" id="t" />
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-16971638-13', 'auto');
+ga('send', 'pageview');
+
+b.addEventListener('click', function() {
+  t.hidden = false;
+  t.focus();
+  t.select();
+  document.execCommand('copy');
+  b.focus();
+  t.hidden = true;
+  ga('send', 'event', 'copy');
+});
+</script>
+
+<script>
+const magic = '¯\\_(ツ)_/¯';
+
+let keyActive = false;
+let activeTimeout;
+let interval;
+const cleanup = () => {
+  b.style.transform = null;
+  m.textContent = '';
+  window.clearInterval(interval);
+};
+
+const start = () => {
+  const y = (Math.random() * 5 + 10) * (Math.random() < 0.5 ? -1 : +1);
+  const x = (Math.random() * 5 + 20) * (Math.random() < 0.5 ? -1 : +1);
+  b.style.transform = `rotateY(${y}deg) rotateX(${x}deg)`;
+
+  let count = -5;
+  interval = setInterval(() => {
+    ++count;
+    if (count <= 0) {
+      return;
+    }
+
+    const extra = document.createElement('button');
+    extra.setAttribute('disabled', '');
+    extra.style.transform = `translateZ(-${count * 15}vmin)`;
+    extra.style.opacity = 1 / (count+1);
+    extra.textContent = magic;
+    m.appendChild(extra);
+  }, 25);
+};
+
+b.onclick = () => {
+  t.hidden = false;
+  t.focus();
+  t.select();
+  document.execCommand('copy');
+  b.focus();
+  t.hidden = true;
+  if (!keyActive) {
+    cleanup();
+  }
+};
+b.onmousedown = () => {
+  start();
+};
+b.onmouseup = () => {
+  b.style.transform = null;
+  cleanup();
+};
+b.onmouseout = () => {
+  b.blur();
+  cleanup();
+};
+b.onkeydown = (ev) => {
+  if (ev.key === ' ') {
+    ev.preventDefault();
+    return;
+  }
+  if (ev.key === 'Enter' && !keyActive) {
+    console.info(ev.key);
+    b.classList.add('active');
+    keyActive = true;
+    start();
+  }
+};
+b.onkeyup = (ev) => {
+  if (ev.key === 'Enter') {
+    keyActive = false;
+    b.classList.remove('active');
+    cleanup();
+  }
+};
+
+const offset = Math.random() * 1000000;
+
+function background(time) {
+  window.requestAnimationFrame(background);
+  time += offset;
+  time /= 4;
+
+  const deg = (time / 100 % 360) * Math.cos(time / 775);
+  const degH = (time / 167 % 360) * Math.sin(time / 539);
+  const highlight = (Math.sin(time / 1313)+1)/4;
+  const hueA = (time / 73 % 360);
+  const hueB = 360 - (time / 129 % 360);
+  const hueC = (time / 63 % 360);
+  const midA = 0 - (Math.cos(time / 151) + 1) * 25;
+  const midB = 50 + Math.sin(time / 681) * 20;
+  const midC = 100 + (Math.cos(time / 151) + 1) * 25;
+  document.body.style.background = `linear-gradient(${degH}deg, rgba(255,255,255,${highlight}) 0%, rgba(255,255,255,0) 100%), linear-gradient(${deg}deg, hsl(${hueA}, 100%, 50%) ${midA}%, hsl(${hueB}, 100%, 50%) ${midB}%, hsl(${hueC}, 100%, 50%) ${midC}%)`;
+}
+background(0);
+</script>
+</body>
+</html>
