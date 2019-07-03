@@ -31,7 +31,7 @@ button {
   max-height: 80vh;
   width: 400px;
   height: 200px;
-  font-size: 5vmin;
+  font-size: 5vmax;
   will-change: transform;
   position: relative;
   transform-style: preserve-3d;
@@ -80,6 +80,34 @@ button.active::after {
   border: 1vmin solid transparent;
   border-color: rgba(255, 255, 255, 0.25);
 }
+#toast {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#toast p {
+  will-change: opacity;
+  transition: opacity 0.05s;
+  border-top-left-radius: 2vmin;
+  border-top-right-radius: 2vmin;
+  border-bottom: none;
+  line-height: 2em;
+  font-size: 3vmax;
+  font-weight: normal;
+  color: white;
+  margin: 0;
+  padding: 0 2em;
+  background: rgba(255, 255, 255, 0.25);
+  opacity: 1;
+  min-width: 80vw;
+}
+#toast:not(.active) p {
+  opacity: 0;
+  transition: opacity 0.5s 1s ease-out;
+}
 </style>
 </head>
 <body>
@@ -90,6 +118,10 @@ button.active::after {
     ¯\_(ツ)_/¯
   </button>
 </main>
+
+<div id="toast">
+  <p id="p"></p>
+</div>
 
 <input type="text" hidden value="¯&zwj;\&zwj;_&zwj;(&zwj;ツ&zwj;)&zwj;_&zwj;/&zwj;¯" id="t" />
 
@@ -122,9 +154,28 @@ const cleanup = () => {
   b.style.transform = null;
   m.textContent = '';
   window.clearInterval(interval);
+
+  toast.classList.remove('active');
 };
 
+const opts = `On your clipboard
+Copied!
+Copied
+¯\‍\\‍_‍(‍ツ‍)‍_‍/‍¯
+Quit poking me`.split(/\n/g);
+
 const start = () => {
+  toast.classList.add('active');
+
+  let i = 0;
+  while (i < opts.length - 1) {
+    if (Math.random() < 0.6) {
+      break;
+    }
+    ++i;
+  }
+  p.textContent = opts[i];
+
   const y = (Math.random() * 5 + 10) * (Math.random() < 0.5 ? -1 : +1);
   const x = (Math.random() * 5 + 20) * (Math.random() < 0.5 ? -1 : +1);
   b.style.transform = `rotateY(${y}deg) rotateX(${x}deg)`;
@@ -156,13 +207,12 @@ b.onclick = () => {
     cleanup();
   }
 };
-b.onmousedown = () => {
-  start();
-};
+b.onmousedown = b.ontouchstart = start;
 b.onmouseup = () => {
   b.style.transform = null;
   cleanup();
 };
+b.ontouchend = b.onmouseup;
 b.onmouseout = () => {
   b.blur();
   cleanup();
@@ -203,7 +253,7 @@ function background(time) {
   const midA = 0 - (Math.cos(time / 151) + 1) * 25;
   const midB = 50 + Math.sin(time / 681) * 20;
   const midC = 100 + (Math.cos(time / 151) + 1) * 25;
-  document.body.style.background = `linear-gradient(${degH}deg, rgba(255,255,255,${highlight}) 0%, rgba(255,255,255,0) 100%), linear-gradient(${deg}deg, hsl(${hueA}, 100%, 50%) ${midA}%, hsl(${hueB}, 100%, 50%) ${midB}%, hsl(${hueC}, 100%, 50%) ${midC}%)`;
+  document.body.style.background = `linear-gradient(${degH}deg, rgba(255,255,255,${highlight}) 0%, rgba(255,255,255,0) 100%), linear-gradient(${deg}deg, hsl(${hueA}, 80%, 50%) ${midA}%, hsl(${hueB}, 80%, 50%) ${midB}%, hsl(${hueC}, 80%, 50%) ${midC}%)`;
 }
 background(0);
 </script>
