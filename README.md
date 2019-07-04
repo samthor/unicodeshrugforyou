@@ -1,1 +1,1 @@
-¯‍\‍_‍(‍ツ‍)‍_‍/‍¯
+[¯‍\‍_‍(‍ツ‍)‍_‍/‍¯](https://unicodeshrugforyou.com)
